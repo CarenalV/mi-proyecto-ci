@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp-deployment
+  namespace: mi-proyecto
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: myapp
@@ -15,5 +16,6 @@ spec:
       containers:
       - name: myapp
         image: myapp:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

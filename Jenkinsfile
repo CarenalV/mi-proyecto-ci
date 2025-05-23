@@ -1,20 +1,27 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "myapp:latest"
+        KUBECTL_CMD = "minikube kubectl --"
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building...'
+                sh 'mvn clean package'  
             }
         }
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Testing...'
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
-        stage('Deploy') {
+        stage('Deploy to Kubernetes') {
             steps {
-                echo 'Deploying...'
+                // Aplicar deployment y service en Kubernetes
+                sh "${KUBECTL_CMD} apply -f deployment.yaml"
+                sh "${KUBECTL_CMD} apply -f service.yaml"
             }
         }
     }
